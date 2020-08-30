@@ -38,7 +38,7 @@
             <input type="text" placeholder="说点什么吧..." class="input_txt" />
             <input type="button" value="发 送" class="input_sub" />
         </div>
-        <audio src="" autoplay></audio>
+        <audio src="" autoplay id="voice" hidden></audio>
     </div>
     <script type="text/javascript" src="js/scroll.js"></script>
     <script>
@@ -83,24 +83,33 @@
                              <img src="img/person01.png" /> <span>${robitMes}</span>
                         </li>`)
                         resetui()
+                        getAudio(robitMes)
                     }
                 })
             }
             //    封装一个获取语音的函数
-            // function getAudio(robitMes) {
-            //     $.ajax({
-            //         method: '',
-            //         url: '',
-            //         data: {
-            //             robitMes
-            //         },
-            //         success: function(res) {
-            //             console.log(res);
-            //         }
+            function getAudio(robitMes) {
+                $.ajax({
+                    method: 'get',
+                    url: 'http://www.liulongbin.top:3006/api/synthesize',
+                    data: {
+                        text: robitMes
+                    },
+                    success: function(res) {
+                        // console.log(res.voiceUrl);
+                        $('#voice').prop('src', res.voiceUrl)
+                    }
 
-            //     })
-            // }
+                })
+            }
             //document 绑定enter键按下触发 $(".input_sub") click事件
+            $(document).on('keyup', function(e) {
+                // console.log(e.keyCode);
+                if (e.keyCode === 13) {
+                    $(".input_sub").click()
+                }
+                return false
+            })
         })
     </script>
 </body>
